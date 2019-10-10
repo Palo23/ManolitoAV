@@ -23,6 +23,6 @@ class UserTableSeeder extends Seeder
         $user->password = bcrypt('EoMmTa14');
         $user->ID_archivo = '1';
         $user->save();
-        $user->roles()->attach($role_admin);
+        $user->roles()->attach($role_admin->ID_rol);
     }
 }
