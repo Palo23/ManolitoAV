@@ -15,7 +15,7 @@ class CreatePublicacionesUsersTable extends Migration
     {
         Schema::create('publicaciones_users', function (Blueprint $table) {
             $table->bigIncrements('idPubUser');
-            $table->unsignedBigInteger('id');
+            $table->integer('id')->unsigned();
             $table->foreign('id')->references('id')->on('users');
             $table->unsignedBigInteger('ID_publicacion');
             $table->foreign('ID_publicacion')->references('ID_publicacion')->on('publicaciones');

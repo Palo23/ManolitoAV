@@ -15,6 +15,14 @@ class User extends Authenticatable
      *
      * @var array
      */
+
+    public function roles()
+    {
+        return $this
+            ->belongsToMany('App\Roles')
+            ->withTimestamps();
+    }
+
     protected $fillable = [
         'name', 'email', 'password', 'ID_archivo'
     ];

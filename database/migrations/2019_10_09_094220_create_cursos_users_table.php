@@ -16,7 +16,7 @@ class CreateCursosUsersTable extends Migration
         Schema::create('cursos_users', function (Blueprint $table) {
             $table->unsignedBigInteger('ID_curso');
             $table->foreign('ID_curso')->references('ID_curso')->on('cursos');
-            $table->unsignedBigInteger('id');
+            $table->integer('id')->unsigned();
             $table->foreign('id')->references('id')->on('users');
             $table->date('year');
             $table->timestamps();
