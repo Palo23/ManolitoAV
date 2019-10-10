@@ -21,10 +21,18 @@ class CreateUsersTable extends Migration
             $table->timestamps();
         });
 
+        Schema::create('roles', function (Blueprint $table) {
+            $table->increments('ID_rol');
+            $table->string('nombre');
+            $table->timestamps();
+        });
+
         Schema::create('users', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name');
             $table->string('email')->unique();
+            $table->integer('ID_rol')->unsigned();
+            $table->foreign('ID_rol')->references('ID_rol')->on('roles');
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->unsignedBigInteger('ID_archivo');
