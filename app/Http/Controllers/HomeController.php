@@ -28,7 +28,8 @@ class HomeController extends Controller
         $rol = Roles::where('ID_rol', $idUsuario)->first();
         $nombreRol = $rol->nombre;
         if ($nombreRol === 'Administrador') {
-            return view('home');
+            $roles = Roles::all();
+            return view('home', compact('roles'));
         } else if($nombreRol === 'Profesor') {
             return view('inicio.agregarCurso');
         }else if($nombreRol === 'Alumno') {
