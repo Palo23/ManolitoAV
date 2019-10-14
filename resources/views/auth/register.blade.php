@@ -43,11 +43,14 @@
                                 <label for="rol" class="col-md-4 col-form-label text-md-right">{{ __('Rol') }}</label>
     
                                 <div class="col-md-6">
-                                    
+                                    <?php
+                                    use App\Roles;
+                                    $roles = Roles::all(); 
+                                    ?>
                                     <select class="form-control" name="rol" id="rol">
-                                        <option value="1">Administrador</option>
-                                        <option value="2">Profesor</option>
-                                        <option value="3">Alumno</option>
+                                        @foreach ($roles as $rol)
+                                        <option value="{{$rol->id}}">{{$rol->nombre}}</option>
+                                        @endforeach
                                     </select>
                                     
                                 </div>
