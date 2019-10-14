@@ -1,8 +1,10 @@
 <?php
 
+
 namespace App\Http\Controllers;
 
 use App\Roles;
+use \Auth;
 use Illuminate\Http\Request;
 
 class HomeController extends Controller
@@ -24,16 +26,14 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $idUsuario = auth()->user()->ID_rol;
-        $rol = Roles::where('ID_rol', $idUsuario)->first();
-        $nombreRol = $rol->nombre;
-        if ($nombreRol === 'Administrador') {
-            $roles = Roles::all();
+        if (Auth::user()->hasRole('Administrador')) {
             return view('home', compact('roles'));
-        } else if($nombreRol === 'Profesor') {
+        } else if(Auth::user()->hasRole('Profesor')) {
             return view('inicio.agregarCurso');
-        }else if($nombreRol === 'Alumno') {
+        }else if(Auth::user()->hasRole('Alumno')) {
             return view('inicio.cursosPage');
         }
+     //  return view('home');
+
     }
 }

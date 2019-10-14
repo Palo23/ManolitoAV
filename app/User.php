@@ -23,8 +23,36 @@ class User extends Authenticatable
             ->withTimestamps();
     }
 
+    public function authorizeRoles($roles)
+{
+    if ($this->hasAnyRole($roles)) {
+        return true;
+    }
+    abort(401, 'Esta acción no está autorizada.');
+}public function hasAnyRole($roles)
+{
+    if (is_array($roles)) {
+        foreach ($roles as $role) {
+            if ($this->hasRole($role)) {
+                return true;
+            }
+        }
+    } else {
+        if ($this->hasRole($roles)) {
+            return true;
+        }
+    }
+    return false;
+}public function hasRole($role)
+{
+    if ($this->roles()->where('nombre', $role)->first()) {
+        return true;
+    }
+    return false;
+}
+
     protected $fillable = [
-        'name', 'email', 'ID_rol', 'password', 'ID_archivo'
+        'name', 'email', 'password', 'ID_archivo'
     ];
 
     /**
