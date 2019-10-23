@@ -26,4 +26,6 @@ Route::resource('/roles', 'RolController');
 
 Route::get('/asignar', 'RolController@asignar')->name('roles.asignar');
 
+Route::get('/perfil/{id}', 'PerfilController@mostrarPerfil')->name('perfil');
+
 //Route::resource('/usuario', 'RolUserController@update')->name('roluser');

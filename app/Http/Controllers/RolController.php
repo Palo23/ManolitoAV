@@ -37,7 +37,7 @@ class RolController extends Controller
     public function store(Request $request)
     {
         $nuevoRol = new Roles;
-        $nuevoRol->ID_Rol = $request->ID_Rol;
+        $nuevoRol->id = $request->ID_Rol;
         $nuevoRol->nombre = $request->nombre;
 
         $nuevoRol->save();
