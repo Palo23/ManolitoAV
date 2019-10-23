@@ -14,7 +14,7 @@ class CreatePublicacionesTable extends Migration
     public function up()
     {
         Schema::create('publicaciones', function (Blueprint $table) {
-            $table->bigIncrements('ID_publicacion');
+            $table->bigIncrements('id');
             $table->string('tema');
             $table->longText('descripcion');
             $table->date('fecha');

@@ -14,11 +14,11 @@ class CreateComentariosPublicacionesTable extends Migration
     public function up()
     {
         Schema::create('comentarios_publicaciones', function (Blueprint $table) {
-            $table->bigIncrements('idComentarioPublicacion');
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('ID_comentario');
-            $table->foreign('ID_comentario')->references('ID_comentario')->on('comentarios');
+            $table->foreign('ID_comentario')->references('id')->on('comentarios');
             $table->unsignedBigInteger('ID_publicacion');
-            $table->foreign('ID_publicacion')->references('ID_publicacion')->on('publicaciones');
+            $table->foreign('ID_publicacion')->references('id')->on('publicaciones');
             $table->timestamps();
         });
     }

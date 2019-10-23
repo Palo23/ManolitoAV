@@ -28,4 +28,8 @@ Route::get('/asignar', 'RolController@asignar')->name('roles.asignar');
 
 Route::get('/perfil/{id}', 'PerfilController@mostrarPerfil')->name('perfil');
 
+Route::get('editar_perfil', 'PerfilController@editarPerfil')->name('perfil.editar');
+
+Route::post('update_foto', 'PerfilController@actualizarFoto')->name('actualizarFoto');
+
 //Route::resource('/usuario', 'RolUserController@update')->name('roluser');

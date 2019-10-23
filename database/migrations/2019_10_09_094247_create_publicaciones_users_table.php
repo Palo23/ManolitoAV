@@ -14,11 +14,11 @@ class CreatePublicacionesUsersTable extends Migration
     public function up()
     {
         Schema::create('publicaciones_users', function (Blueprint $table) {
-            $table->bigIncrements('idPubUser');
-            $table->integer('id')->unsigned();
-            $table->foreign('id')->references('id')->on('users');
+            $table->bigIncrements('id');
+            $table->integer('id_user')->unsigned();
+            $table->foreign('id_user')->references('id')->on('users');
             $table->unsignedBigInteger('ID_publicacion');
-            $table->foreign('ID_publicacion')->references('ID_publicacion')->on('publicaciones');
+            $table->foreign('ID_publicacion')->references('id')->on('publicaciones');
             $table->timestamps();
         });
     }

@@ -14,11 +14,11 @@ class CreateArchivosPublicacionesTable extends Migration
     public function up()
     {
         Schema::create('archivos_publicaciones', function (Blueprint $table) {
-            $table->bigIncrements('idArchivoPublicacion');
+            $table->bigIncrements('id');
             $table->unsignedBigInteger('ID_archivo');
-            $table->foreign('ID_archivo')->references('ID_archivo')->on('archivos');
+            $table->foreign('ID_archivo')->references('id')->on('archivos');
             $table->unsignedBigInteger('ID_publicacion');
-            $table->foreign('ID_publicacion')->references('ID_publicacion')->on('publicaciones');
+            $table->foreign('ID_publicacion')->references('id')->on('publicaciones');
             $table->timestamps();
         });
     }
