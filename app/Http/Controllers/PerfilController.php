@@ -6,6 +6,7 @@ use App\Archivos;
 use App\Http\Requests\UpdateFotoPerfil;
 use Illuminate\Http\Request;
 use App\User;
+use App\Roles;
 use Illuminate\Support\Str;
 use Auth;
 
@@ -27,8 +28,7 @@ class PerfilController extends Controller
         if (auth()->user()->id === $user->id) {
         $archivo = $user->ID_archivo;
         $foto = Archivos::find($archivo);
-
-        return view('user.perfil', compact('user', 'foto'));
+            return view('user.perfil', compact('user', 'foto'));
         }else{
             return back();
         }
@@ -49,11 +49,6 @@ class PerfilController extends Controller
         $user->save(); // guardamos los cambios.
 
         return redirect()->route('perfil', ['id' => $user->id]);
-    }
-
-    public function editarPerfil()
-    {
-        return view('user.editarPerfil');
     }
 
 }

@@ -60,6 +60,10 @@
                                     <a class="dropdown-item" href="{{ route('perfil', ['id' => Auth::user()->id]) }}">
                                             {{ __('Perfil') }}
                                         </a>
+
+                                        <a class="dropdown-item" href="/">
+                                            {{ __('Inicio') }}
+                                        </a>
                                         
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
