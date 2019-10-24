@@ -40,7 +40,7 @@ class PerfilController extends Controller
         $nombreArchivo = Str::random(10) . '.' .$archivo->getClientOriginalExtension();
         
         $foto = new Archivos;
-        $foto->ruta = "files" . '/' . $nombreArchivo;
+        $foto->ruta = "/files" . '/' . $nombreArchivo;
         $foto->nombre = $nombreArchivo;
         $foto->save();
         $user = Auth::user();
