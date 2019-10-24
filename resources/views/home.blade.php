@@ -18,10 +18,6 @@
                             <a class="btn btn-info" href="{{ route('register')}}"><strong>Registrar Usuario</strong></a>
                         </div>
                         <br>
-                    <div class="text-center">
-                            <a class="btn btn-info" href="{{ route('roles.index') }}"><strong>Registrar Rol</strong></a>
-                     </div>
-                     <br>
 
                         
 
