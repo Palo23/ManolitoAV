@@ -21,6 +21,7 @@ class CreateCursosTable extends Migration
             $table->foreign('ID_archivo')->references('id')->on('archivos');
             $table->string('nombre');
             $table->longText('description');
+            $table->string('password');
             $table->timestamps();
         });
     }

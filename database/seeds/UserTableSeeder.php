@@ -41,5 +41,45 @@ class UserTableSeeder extends Seeder
         $user->ID_archivo = '1';
         $user->save();
         $user->roles()->attach($role_profesor->id);
+
+        $user = new User();
+        $user->name = 'Jesús Colocho';
+        $user->email = 'jesus@gmail.com';
+        $user->password = bcrypt('asdfg123');
+        $user->ID_archivo = '1';
+        $user->save();
+        $user->roles()->attach($role_profesor->id);
+
+        $user = new User();
+        $user->name = 'Rosa de Espinoza';
+        $user->email = 'rosita@gmail.com';
+        $user->password = bcrypt('asdfg123');
+        $user->ID_archivo = '1';
+        $user->save();
+        $user->roles()->attach($role_alumno->id);
+
+        $user = new User();
+        $user->name = 'Profesor Genérico';
+        $user->email = 'prof@gmail.com';
+        $user->password = bcrypt('asdfg123');
+        $user->ID_archivo = '1';
+        $user->save();
+        $user->roles()->attach($role_profesor->id);
+
+        $user = new User();
+        $user->name = 'Nuevo User';
+        $user->email = 'new@gmail.com';
+        $user->password = bcrypt('asdfg123');
+        $user->ID_archivo = '1';
+        $user->save();
+        $user->roles()->attach($role_profesor->id);
+
+        $user = new User();
+        $user->name = 'Luis Mario Espinoza';
+        $user->email = 'luisesp@gmail.com';
+        $user->password = bcrypt('asdfg123');
+        $user->ID_archivo = '1';
+        $user->save();
+        $user->roles()->attach($role_admin->id);
     }
 }

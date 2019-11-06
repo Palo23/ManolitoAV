@@ -19,13 +19,24 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i)
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('tabla-componente', require('./components/TablaComponent.vue').default);
+Vue.component('datos-componente', require('./components/DatosComponent.vue').default);
+Vue.component('user-componente', require('./components/UserComponent.vue').default);
+Vue.component('cursocrear-componente', require('./components/CreacionComponent.vue').default);
+Vue.component('lista-componente', require('./components/ListaComponent.vue').default);
+Vue.component('modal-componente', require('./components/ModalComponent.vue').default);
+Vue.component('todos-componente', require('./components/TodosComponent.vue').default);
+Vue.component('curso-componente', require('./components/CursoComponent.vue').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+import auth from './mixins/auth';
+
+Vue.mixin(auth);
 
 const app = new Vue({
     el: '#app',

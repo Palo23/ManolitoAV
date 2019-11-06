@@ -3,7 +3,7 @@
 @section('content')
 <div class="container">
     <div class="row">
-        <div class="col-md-8 offset-2">
+        <div class="col-md-8 offset-1">
 
             <div class="card">
                 <h5 class="card-header">Mi perfil</h5>
@@ -25,7 +25,7 @@
 
                                     @if ($errors->has('profile-picture'))
                                         <div class="alert alert-danger">
-                                           <p>El archivo falló en cargarse</p>
+                                            {{ $errors->first('profile-picture') }}
                                         </div>
                                     @endif
                                 </form>

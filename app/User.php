@@ -16,6 +16,13 @@ class User extends Authenticatable
      * @var array
      */
 
+    public function cursos()
+    {
+        return $this
+        ->belongsToMany('App\Cursos')
+        ->withTimestamps();
+    }
+
     public function roles()
     {
         return $this

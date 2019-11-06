@@ -30,4 +30,18 @@ Route::get('/perfil/{id}', 'PerfilController@mostrarPerfil')->name('perfil');
 
 Route::post('update_foto', 'PerfilController@actualizarFoto')->name('actualizarFoto');
 
+Route::apiResource('usuarios', 'UsuariosController');
+
+Route::apiResource('cursosCreacion', 'CursoProfesorController');
+
+Route::apiResource('inscripcion', 'InscripcionController');
+
+Route::get('/users', 'HomeController@usuario')->name('usuario.tabla');
+
+Route::post('inscribir', 'HomeController@inscribirse')->name('inscribirse');
+
+Route::get('/search', 'HomeController@search')->name('home.search');
+
+Route::get('vistageneral/{id}', 'GeneralController@show')->name('vistaCurso');
+
 //Route::resource('/usuario', 'RolUserController@update')->name('roluser');

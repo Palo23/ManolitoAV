@@ -6,6 +6,7 @@
 
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
+    <meta name="user" content="{{ Auth::user() }}">
 
     <title>{{ config('app.name') }}</title>
 
@@ -21,6 +22,9 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
+        <?php
+        use App\Archivos;
+        ?>
     <div id="app">
         <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
             <div class="container">
@@ -51,6 +55,17 @@
                                 </li>
                             @endif
                         @else
+                        <?php
+
+                                $archivo = Auth::user()->ID_archivo;
+                                $foto = Archivos::find($archivo);
+
+                        ?>
+
+                        <a class="navbar-brand" href="{{ route('perfil', ['id' => Auth::user()->id]) }}">
+                            <img src="{{ $foto->ruta }}" width="25" height="25" alt="">
+                        </a>        
+
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>

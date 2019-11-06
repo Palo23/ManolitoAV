@@ -16,6 +16,7 @@
 
                     <div class="text-center">
                             <a class="btn btn-info" href="{{ route('register')}}"><strong>Registrar Usuario</strong></a>
+                            <a class="btn btn-info" href="{{ route('usuario.tabla')}}"><strong>Gestionar Usuarios</strong></a>
                         </div>
                         <br>
 
