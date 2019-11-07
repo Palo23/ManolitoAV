@@ -1975,6 +1975,27 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['curso'],
   data: function data() {
@@ -2031,7 +2052,7 @@ __webpack_require__.r(__webpack_exports__);
         });
         this.inscrito = true;
       } else {
-        alert('Contraseña incorrecta');
+        $('#errorPass').modal({});
         this.modoEdicion = false;
         this.password = '';
       }
@@ -2425,20 +2446,26 @@ __webpack_require__.r(__webpack_exports__);
     });
   },
   methods: {
-    nuevoCurso: function nuevoCurso(curso) {},
+    nuevoCurso: function nuevoCurso(curso) {
+      var _this2 = this;
+
+      axios.get('/inscripcion').then(function (res) {
+        _this2.cursos = res.data;
+      });
+    },
     updateCurso: function updateCurso(index, curso) {
       this.cursos[index] = curso;
     }
   },
   computed: {
     searchUser: function searchUser() {
-      var _this2 = this;
+      var _this3 = this;
 
       if (this.name === '') {
         return this.usuarios;
       } else {
         return this.usuarios.filter(function (usuario) {
-          return usuario.name.toLowerCase().includes(_this2.name.toLowerCase()) || usuario.email.toLowerCase().includes(_this2.name.toLowerCase()) || usuario.roles[0].nombre.toLowerCase().includes(_this2.name.toLowerCase());
+          return usuario.name.toLowerCase().includes(_this3.name.toLowerCase()) || usuario.email.toLowerCase().includes(_this3.name.toLowerCase()) || usuario.roles[0].nombre.toLowerCase().includes(_this3.name.toLowerCase());
         });
       }
     }
@@ -38163,10 +38190,83 @@ var render = function() {
                   )
                 ])
           ])
-    ])
+    ]),
+    _vm._v(" "),
+    _vm._m(0)
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "errorPass",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "errorPassLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _c("div", { staticClass: "modal-header" }, [
+                _c(
+                  "h5",
+                  {
+                    staticClass: "modal-title",
+                    attrs: { id: "exampleModalLabel" }
+                  },
+                  [_vm._v("Error")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "close",
+                    attrs: {
+                      type: "button",
+                      "data-dismiss": "modal",
+                      "aria-label": "Close"
+                    }
+                  },
+                  [
+                    _c("span", { attrs: { "aria-hidden": "true" } }, [
+                      _vm._v("×")
+                    ])
+                  ]
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _c("p", [_vm._v("Contraseña incorrecta")])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("Aceptar")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
+    )
+  }
+]
 render._withStripped = true
 
 

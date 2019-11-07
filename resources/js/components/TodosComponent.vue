@@ -32,6 +32,10 @@ export default {
     },
     methods: {
         nuevoCurso(curso){
+            axios.get('/inscripcion')
+        .then((res) => {
+            this.cursos = res.data;
+        });
         },
         updateCurso(index, curso){
             this.cursos[index] = curso;
