@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers;
 
-use App\Cursos;
 use Illuminate\Http\Request;
+use App\Cursos;
 use Illuminate\Support\Facades\Auth;
+use App\Archivos;
+use App\Http\Requests\UpdateFotoPerfil;
+use App\User;
+use Illuminate\Support\Str;
 
-class GeneralController extends Controller
+class EditarCursoController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -16,12 +20,15 @@ class GeneralController extends Controller
 
     public function __construct()
     {
+       // $this->middleware('guest');
         $this->middleware('auth');
     }
 
+    private $profilePicturesFolder = "files";
+
     public function index()
     {
-        
+        //
     }
 
     /**
@@ -53,20 +60,38 @@ class GeneralController extends Controller
      */
     public function show($id)
     {
-        $curso = Cursos::find($id);
-        $idUser = Auth::user()->id;
-        $profesorCurso = $curso->id_user;
-
-        if ((Auth::user()->hasCurso($id)) || ($idUser === $profesorCurso) ) {
-            if (Auth::user()->hasRole("Alumno")) {
-                return view('cursos.vistaGeneral', compact('curso'));
-            }elseif (Auth::user()->hasRole("Profesor")) {
-                return view('cursos.vistaProfesor', compact('curso'));
-            }
-            
-        }else{
+        $usuarioID = Auth::user()->id;
+        $usuario = User::find($usuarioID);
+        $curso = Cursos::where('id', $id)->with('users')->first();
+        $inscritos = $curso->users;
+        $cursoID = $curso->id_user;
+        if ($usuarioID === $cursoID) {
+            $archivo = $curso->ID_archivo;
+            $foto = Archivos::find($archivo);
+            return view('cursos.editarCurso', compact('curso', 'foto', 'usuario', 'inscritos'));
+        }else {
             return back();
         }
+        
+    }
+
+    public function actualizarFotoCurso(UpdateFotoPerfil $request, $id) 
+    {
+        $archivo = $request->file('profile-picture');
+        $nombreArchivo = Str::random(10) . '.' .$archivo->getClientOriginalExtension();
+        
+        $foto = new Archivos;
+        $foto->ruta = "/files" . '/' . $nombreArchivo;
+        $foto->nombre = $nombreArchivo;
+        $foto->save();
+        $curso = Cursos::find($id);
+        $curso->nombre = $request->nombre;
+        $curso->description = $request->descripcion;
+        $archivo->move($this->profilePicturesFolder,$nombreArchivo);// subimos al servidor
+        $curso->ID_archivo = $foto->id; // guardamos el nombre en la bd
+        $curso->save(); // guardamos los cambios.
+
+        return redirect()->route('edicion', ['id' => $curso->id]);
     }
 
     /**

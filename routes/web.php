@@ -44,4 +44,9 @@ Route::get('/search', 'HomeController@search')->name('home.search');
 
 Route::get('vistageneral/{id}', 'GeneralController@show')->name('vistaCurso');
 
+Route::get('/editarCurso/{id}', 'EditarCursoController@show')->name('edicion');
+
+Route::post('update_cursoph/{id}', 'EditarCursoController@actualizarFotoCurso')->name('actualizarFotoCurso');
+
+
 //Route::resource('/usuario', 'RolUserController@update')->name('roluser');

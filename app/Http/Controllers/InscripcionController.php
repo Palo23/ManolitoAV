@@ -23,7 +23,7 @@ class InscripcionController extends Controller
 
     public function index()
     {
-        return Cursos::with('archivo', 'users')->get();
+        return Cursos::with('archivo', 'users', 'profesor')->get();
     }
 
     /**

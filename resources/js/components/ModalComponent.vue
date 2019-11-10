@@ -3,11 +3,12 @@
                     <form action="" @submit.prevent="nuevoCurso">
                         <div class="form-group">
                             <label for="nombre">Nombre del Curso</label>
-                            <input type="text" class="form-control" name="nombre" v-model="nombre">
-                            <label for="descripcion">Descripción</label>
-                            <input type="text" class="form-control" name="descripcion" v-model="descripcion">
+                            <input type="text" class="form-control" name="nombre" v-model="nombre" maxlength="25">
+                            <label for="descripcion">Descripción</label>    
+                            <input type="text" class="form-control" name="descripcion" v-model="descripcion" maxlength="100">
                             <label for="password">Contraseña</label>
                             <input type="password" class="form-control" name="password" v-model="password">
+                            <label class="text-danger" v-if="error">*Debes ingresar todos los campos</label>
                             <!-- <label for="fotoCurso">Imagen del curso</label>
                             <div style="overflow-x: hidden;border: 1px solid #f1f1f1; margin: 5px 0px 3px 0px;">
                                 <input type="file" name="fotoCurso" v-on:change="changeFiles" ref="foto" accept=".jpg, .jpeg, .png" class="btn btn-xs">
@@ -24,7 +25,8 @@ export default {
             nombre: '',
             descripcion: '',
             password: '',
-            foto: ''
+            foto: '',
+            error: false
         }
     },
     methods: {
@@ -39,6 +41,12 @@ export default {
                 descripcion: this.descripcion,
                 password: this.password
             };
+            if (this.nombre == '' || this.descripcion == '' || this.password == '') {
+                this.error = true;
+                this.nombre = '';
+                this.descripcion = '';
+                this.password = '';
+            }else{
             this.nombre = '',
             this.descripcion = '',
             this.password = '',
@@ -47,6 +55,7 @@ export default {
                 const nuevoCurso = res.data;
                 this.$emit('new', nuevoCurso);
             });
+            }
         }   
     }
 }

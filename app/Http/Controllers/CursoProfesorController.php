@@ -25,7 +25,7 @@ class CursoProfesorController extends Controller
     {
         $idUser = Auth::user()->id;
 
-        return Cursos::all()->where('id_user', $idUser);
+        return Cursos::where('id_user', $idUser)->with('archivo')->get();
     }
 
     /**
@@ -68,7 +68,12 @@ class CursoProfesorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $curso = Cursos::find($id);
+        $curso->nombre = $request->nombre;
+        $curso->description = $request->descripcion;
+        $curso->save();
+
+        return $curso;
     }
 
     /**
@@ -79,6 +84,8 @@ class CursoProfesorController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $curso = Cursos::findOrFail($id);
+        $curso->users()->detach();
+        $curso->delete();
     }
 }

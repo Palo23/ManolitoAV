@@ -15,13 +15,20 @@ class User extends Authenticatable
      *
      * @var array
      */
-
     public function cursos()
     {
         return $this
         ->belongsToMany('App\Cursos')
         ->withTimestamps();
     }
+
+    public function hasCurso($curso)
+{
+    if ($this->cursos()->where('cursos_id', $curso)->first()) {
+        return true;
+    }
+    return false;
+}
 
     public function roles()
     {

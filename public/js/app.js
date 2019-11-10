@@ -1896,6 +1896,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -1911,20 +1913,43 @@ __webpack_require__.r(__webpack_exports__);
       _this.cursos = res.data;
     });
   },
-  updated: function updated() {
-    var _this2 = this;
-
-    this.nombreCurso = '';
-    axios.get('/cursosCreacion').then(function (res) {
-      _this2.cursos = res.data;
-    });
-  },
   methods: {
     modalCrear: function modalCrear() {
-      $('#exampleModal').modal({});
+      $('#crearModal').modal({});
     },
     agregarCurso: function agregarCurso(nuevoCurso) {
       $('#exampleModal').modal('hide');
+    },
+    updateCurso: function updateCurso(index, curso) {
+      var _this2 = this;
+
+      this.cursos[index] = curso;
+      this.nombreCurso = '';
+      axios.get('/cursosCreacion').then(function (res) {
+        _this2.cursos = res.data;
+      });
+    },
+    borrarCurso: function borrarCurso(index, curso) {
+      var _this3 = this;
+
+      this.cursos.splice(index, 1);
+      this.nombreCurso = '';
+      axios.get('/cursosCreacion').then(function (res) {
+        _this3.cursos = res.data;
+      });
+    }
+  },
+  computed: {
+    searchCurso: function searchCurso() {
+      var _this4 = this;
+
+      if (this.nombreCurso === '') {
+        return this.cursos;
+      } else {
+        return this.cursos.filter(function (curso) {
+          return curso.nombre.toLowerCase().includes(_this4.nombreCurso.toLowerCase()) || curso.description.toLowerCase().includes(_this4.nombreCurso.toLowerCase());
+        });
+      }
     }
   }
 });
@@ -1940,6 +1965,9 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
+//
 //
 //
 //
@@ -2118,6 +2146,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['usuario'],
   data: function data() {
@@ -2155,18 +2185,33 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     modalDelUser: function modalDelUser() {
-      this.toDeleteUserId = this.usuario.name;
-      console.log('toDeleteUserId', this.toDeleteUserId);
+      var toDeleteUserId = this.usuario.id;
+      var usuarioID = this.user.id;
+      console.log(this.toDeleteUserId);
+      console.log(usuarioID);
       $('#exampleModal').modal({});
     },
-    delUser: function delUser() {
+    delUser: function delUser(id) {
       var _this2 = this;
 
-      axios["delete"]("usuarios/".concat(this.usuario.id)).then(function (res) {
-        $('#exampleModal').modal('hide');
+      var usuarioID = this.user.id;
+      idUser = id;
 
-        _this2.$emit('borrar');
-      });
+      if (idUser === '') {
+        alert("No existe");
+      }
+
+      console.log('toDeleteUserId', idUser);
+
+      if (usuarioID === this.usuario.id) {
+        alert("No puedes eliminar al usuario actual");
+      } else {
+        axios["delete"]("usuarios/".concat(this.usuario.id)).then(function (res) {
+          $('#exampleModal').modal('hide');
+
+          _this2.$emit('borrar');
+        });
+      }
     }
   }
 });
@@ -2209,6 +2254,28 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   props: ['curso'],
   data: function data() {
@@ -2221,7 +2288,9 @@ __webpack_require__.r(__webpack_exports__);
       },
       modoEdicion: false,
       modoEliminar: false,
-      toDeleteUserId: ''
+      toDeleteCursoId: '',
+      nombre: '',
+      descripcion: ''
     };
   },
   methods: {
@@ -2231,30 +2300,30 @@ __webpack_require__.r(__webpack_exports__);
     cancelar: function cancelar() {
       this.modoEdicion = false;
     },
-    actualizarUsuario: function actualizarUsuario() {
+    actualizarCurso: function actualizarCurso() {
       var _this = this;
 
       var params = {
-        name: this.usuario.name,
-        email: this.usuario.email
+        nombre: this.curso.nombre,
+        descripcion: this.curso.description
       };
-      axios.put("/usuarios/".concat(this.usuario.id), params).then(function (res) {
+      axios.put("/cursosCreacion/".concat(this.curso.id), params).then(function (res) {
         _this.modoEdicion = false;
-        var usuario = res.data;
+        var curso = res.data;
 
-        _this.$emit('actualizar', usuario);
+        _this.$emit('actualizar', curso);
       });
     },
-    modalDelUser: function modalDelUser() {
-      this.toDeleteUserId = this.usuario.name;
-      console.log('toDeleteUserId', this.toDeleteUserId);
-      $('#exampleModal').modal({});
+    modalDelCurso: function modalDelCurso() {
+      this.toDeleteCursoId = this.curso.id;
+      console.log('toDeleteCursoId', this.toDeleteCursoId);
+      $('#borrarCursoModal').modal({});
     },
-    delUser: function delUser() {
+    delCurso: function delCurso() {
       var _this2 = this;
 
-      axios["delete"]("usuarios/".concat(this.usuario.id)).then(function (res) {
-        $('#exampleModal').modal('hide');
+      axios["delete"]("/cursosCreacion/".concat(this.curso.id)).then(function (res) {
+        $('#borrarCursoModal').modal('hide');
 
         _this2.$emit('borrar');
       });
@@ -2292,13 +2361,15 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       nombre: '',
       descripcion: '',
       password: '',
-      foto: ''
+      foto: '',
+      error: false
     };
   },
   methods: {
@@ -2315,11 +2386,19 @@ __webpack_require__.r(__webpack_exports__);
         descripcion: this.descripcion,
         password: this.password
       };
-      this.nombre = '', this.descripcion = '', this.password = '', axios.post('/cursosCreacion', params).then(function (res) {
-        var nuevoCurso = res.data;
 
-        _this.$emit('new', nuevoCurso);
-      });
+      if (this.nombre == '' || this.descripcion == '' || this.password == '') {
+        this.error = true;
+        this.nombre = '';
+        this.descripcion = '';
+        this.password = '';
+      } else {
+        this.nombre = '', this.descripcion = '', this.password = '', axios.post('/cursosCreacion', params).then(function (res) {
+          var nuevoCurso = res.data;
+
+          _this.$emit('new', nuevoCurso);
+        });
+      }
     }
   }
 });
@@ -2335,6 +2414,8 @@ __webpack_require__.r(__webpack_exports__);
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+//
+//
 //
 //
 //
@@ -37897,7 +37978,39 @@ var render = function() {
             "card-header d-flex justify-content-between align-items-center"
         },
         [
-          _vm._m(0),
+          _c(
+            "div",
+            {
+              staticClass: "col-sm-12 col-md-4 hidden-sm hidden-xs",
+              staticStyle: { "border-radius": "2px", "padding-bottom": "2px" },
+              attrs: { id: "busqueda" }
+            },
+            [
+              _c("h2", [_vm._v("Buscar curso")]),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.nombreCurso,
+                    expression: "nombreCurso"
+                  }
+                ],
+                staticClass: "form-control",
+                attrs: { type: "text", placeholder: "Buscar" },
+                domProps: { value: _vm.nombreCurso },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.nombreCurso = $event.target.value
+                  }
+                }
+              })
+            ]
+          ),
           _vm._v(" "),
           _c(
             "button",
@@ -37918,14 +38031,28 @@ var render = function() {
         staticStyle: { "table-layout": "fixed", width: "100%" }
       },
       [
-        _vm._m(1),
+        _vm._m(0),
         _vm._v(" "),
         _c(
           "tbody",
-          _vm._l(_vm.cursos, function(curso) {
+          _vm._l(_vm.searchCurso, function(curso, index) {
             return _c("lista-componente", {
               key: curso.id,
-              attrs: { curso: curso }
+              attrs: { curso: curso },
+              on: {
+                actualizar: function($event) {
+                  var i = arguments.length,
+                    argsArray = Array(i)
+                  while (i--) argsArray[i] = arguments[i]
+                  return _vm.updateCurso.apply(
+                    void 0,
+                    [index].concat(argsArray)
+                  )
+                },
+                borrar: function($event) {
+                  return _vm.borrarCurso(index)
+                }
+              }
             })
           }),
           1
@@ -37938,10 +38065,10 @@ var render = function() {
       {
         staticClass: "modal fade",
         attrs: {
-          id: "exampleModal",
+          id: "crearModal",
           tabindex: "-1",
           role: "dialog",
-          "aria-labelledby": "exampleModalLabel",
+          "aria-labelledby": "crearModalLabel",
           "aria-hidden": "true"
         }
       },
@@ -37951,7 +38078,7 @@ var render = function() {
           { staticClass: "modal-dialog", attrs: { role: "document" } },
           [
             _c("div", { staticClass: "modal-content" }, [
-              _vm._m(2),
+              _vm._m(1),
               _vm._v(" "),
               _c(
                 "div",
@@ -37960,7 +38087,7 @@ var render = function() {
                 1
               ),
               _vm._v(" "),
-              _vm._m(3)
+              _vm._m(2)
             ])
           ]
         )
@@ -37969,27 +38096,6 @@ var render = function() {
   ])
 }
 var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c(
-      "div",
-      {
-        staticClass: "col-sm-12 col-md-4 hidden-sm hidden-xs",
-        staticStyle: { "border-radius": "2px", "padding-bottom": "2px" },
-        attrs: { id: "busqueda" }
-      },
-      [
-        _c("h2", [_vm._v("Buscar curso")]),
-        _vm._v(" "),
-        _c("input", {
-          staticClass: "form-control",
-          attrs: { type: "text", placeholder: "Buscar" }
-        })
-      ]
-    )
-  },
   function() {
     var _vm = this
     var _h = _vm.$createElement
@@ -38096,6 +38202,10 @@ var render = function() {
                 _vm._v(_vm._s(_vm.curso.description))
               ]),
               _vm._v(" "),
+              _c("p", { staticClass: "card-text" }, [
+                _vm._v("Profesor: " + _vm._s(_vm.curso.profesor.name))
+              ]),
+              _vm._v(" "),
               _c(
                 "a",
                 {
@@ -38115,6 +38225,10 @@ var render = function() {
                   _vm._v(" "),
                   _c("p", { staticClass: "card-text" }, [
                     _vm._v(_vm._s(_vm.curso.description))
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "card-text" }, [
+                    _vm._v("Profesor:  " + _vm._s(_vm.curso.profesor.name))
                   ]),
                   _vm._v(" "),
                   _c("input", {
@@ -38148,6 +38262,8 @@ var render = function() {
                     }
                   }),
                   _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
                   _c(
                     "button",
                     {
@@ -38178,6 +38294,10 @@ var render = function() {
                   _vm._v(" "),
                   _c("p", { staticClass: "card-text" }, [
                     _vm._v(_vm._s(_vm.curso.description))
+                  ]),
+                  _vm._v(" "),
+                  _c("p", { staticClass: "card-text" }, [
+                    _vm._v("Profesor: " + _vm._s(_vm.curso.profesor.name))
                   ]),
                   _vm._v(" "),
                   _c(
@@ -38254,7 +38374,7 @@ var staticRenderFns = [
                 _c(
                   "button",
                   {
-                    staticClass: "btn btn-danger",
+                    staticClass: "btn btn-secondary",
                     attrs: { type: "button", "data-dismiss": "modal" }
                   },
                   [_vm._v("Aceptar")]
@@ -38298,6 +38418,16 @@ var render = function() {
       [
         _c("tr", [
           _c("th", [
+            _c("input", {
+              attrs: { type: "hidden" },
+              domProps: { value: _vm.user.id }
+            }),
+            _vm._v(" "),
+            _c("input", {
+              attrs: { type: "hidden" },
+              domProps: { value: _vm.usuario.id }
+            }),
+            _vm._v(" "),
             _vm.modoEdicion
               ? _c("input", {
                   directives: [
@@ -38388,9 +38518,13 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-danger",
+                      staticClass: "btn btn-secondary",
                       attrs: { type: "submit" },
-                      on: { click: _vm.modalDelUser }
+                      on: {
+                        click: function($event) {
+                          return _vm.modalDelUser(_vm.usuario.id)
+                        }
+                      }
                     },
                     [_vm._v("Eliminar")]
                   )
@@ -38421,7 +38555,11 @@ var render = function() {
               _vm._m(0),
               _vm._v(" "),
               _c("div", { staticClass: "modal-body" }, [
-                _vm._v("\n        ¿Seguro que deseás eliminar?\n      ")
+                _vm._v(
+                  "\n        ¿Seguro que deseás eliminar? | " +
+                    _vm._s(this.toDeleteUserId) +
+                    "\n      "
+                )
               ]),
               _vm._v(" "),
               _c("div", { staticClass: "modal-footer" }, [
@@ -38430,9 +38568,13 @@ var render = function() {
                   {
                     staticClass: "btn btn-primary",
                     attrs: { type: "button" },
-                    on: { click: _vm.delUser }
+                    on: {
+                      click: function($event) {
+                        return _vm.delUser(this.toDeleteUserId)
+                      }
+                    }
                   },
-                  [_vm._v("Confirm")]
+                  [_vm._v("Confirmar")]
                 ),
                 _vm._v(" "),
                 _c(
@@ -38460,7 +38602,7 @@ var staticRenderFns = [
       _c(
         "h5",
         { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
-        [_vm._v("Modal title")]
+        [_vm._v("Eliminar usuario")]
       ),
       _vm._v(" "),
       _c(
@@ -38531,7 +38673,13 @@ var render = function() {
                     }
                   }
                 })
-              : _c("p", [_vm._v(_vm._s(_vm.curso.nombre))])
+              : _c("p", [
+                  _c(
+                    "a",
+                    { attrs: { href: "/vistageneral/" + _vm.curso.id } },
+                    [_vm._v(_vm._s(_vm.curso.nombre))]
+                  )
+                ])
           ]),
           _vm._v(" "),
           _c("td", [
@@ -38560,7 +38708,18 @@ var render = function() {
               : _c("p", [_vm._v(_vm._s(_vm.curso.description))])
           ]),
           _vm._v(" "),
-          _c("td", [_vm._v(_vm._s(_vm.curso.id_user))]),
+          _c("td", [
+            _c("a", { attrs: { href: "/editarCurso/" + _vm.curso.id } }, [
+              _c("img", {
+                attrs: {
+                  width: "50",
+                  height: "50",
+                  src: _vm.curso.archivo.ruta,
+                  alt: "..."
+                }
+              })
+            ])
+          ]),
           _vm._v(" "),
           _c("td", [
             _vm.modoEdicion
@@ -38570,7 +38729,7 @@ var render = function() {
                     {
                       staticClass: "btn btn-success",
                       attrs: { type: "submit" },
-                      on: { click: _vm.actualizarUsuario }
+                      on: { click: _vm.actualizarCurso }
                     },
                     [_vm._v("Guardar Cambios")]
                   ),
@@ -38587,10 +38746,9 @@ var render = function() {
                 ])
               : _c("div", [
                   _c(
-                    "button",
+                    "a",
                     {
                       staticClass: "btn btn-primary",
-                      attrs: { type: "submit" },
                       on: { click: _vm.editar }
                     },
                     [_vm._v("Editar")]
@@ -38599,9 +38757,9 @@ var render = function() {
                   _c(
                     "button",
                     {
-                      staticClass: "btn btn-danger",
+                      staticClass: "btn btn-secondary",
                       attrs: { type: "submit" },
-                      on: { click: _vm.modalDelUser }
+                      on: { click: _vm.modalDelCurso }
                     },
                     [_vm._v("Eliminar")]
                   )
@@ -38609,10 +38767,90 @@ var render = function() {
           ])
         ])
       ]
+    ),
+    _vm._v(" "),
+    _c(
+      "div",
+      {
+        staticClass: "modal fade",
+        attrs: {
+          id: "borrarCursoModal",
+          tabindex: "-1",
+          role: "dialog",
+          "aria-labelledby": "borrarCursoModalLabel",
+          "aria-hidden": "true"
+        }
+      },
+      [
+        _c(
+          "div",
+          { staticClass: "modal-dialog", attrs: { role: "document" } },
+          [
+            _c("div", { staticClass: "modal-content" }, [
+              _vm._m(0),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-body" }, [
+                _vm._v(
+                  "\n        ¿Seguro que deseás eliminar? | " +
+                    _vm._s(this.toDeleteCursoId) +
+                    "\n      "
+                )
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "modal-footer" }, [
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-primary",
+                    attrs: { type: "button" },
+                    on: { click: _vm.delCurso }
+                  },
+                  [_vm._v("Confirmar")]
+                ),
+                _vm._v(" "),
+                _c(
+                  "button",
+                  {
+                    staticClass: "btn btn-danger",
+                    attrs: { type: "button", "data-dismiss": "modal" }
+                  },
+                  [_vm._v("Cancelar")]
+                )
+              ])
+            ])
+          ]
+        )
+      ]
     )
   ])
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("div", { staticClass: "modal-header" }, [
+      _c(
+        "h5",
+        { staticClass: "modal-title", attrs: { id: "exampleModalLabel" } },
+        [_vm._v("Eliminar curso")]
+      ),
+      _vm._v(" "),
+      _c(
+        "button",
+        {
+          staticClass: "close",
+          attrs: {
+            type: "button",
+            "data-dismiss": "modal",
+            "aria-label": "Close"
+          }
+        },
+        [_c("span", { attrs: { "aria-hidden": "true" } }, [_vm._v("×")])]
+      )
+    ])
+  }
+]
 render._withStripped = true
 
 
@@ -38662,7 +38900,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control",
-            attrs: { type: "text", name: "nombre" },
+            attrs: { type: "text", name: "nombre", maxlength: "25" },
             domProps: { value: _vm.nombre },
             on: {
               input: function($event) {
@@ -38688,7 +38926,7 @@ var render = function() {
               }
             ],
             staticClass: "form-control",
-            attrs: { type: "text", name: "descripcion" },
+            attrs: { type: "text", name: "descripcion", maxlength: "100" },
             domProps: { value: _vm.descripcion },
             on: {
               input: function($event) {
@@ -38722,7 +38960,13 @@ var render = function() {
                 _vm.password = $event.target.value
               }
             }
-          })
+          }),
+          _vm._v(" "),
+          _vm.error
+            ? _c("label", { staticClass: "text-danger" }, [
+                _vm._v("*Debes ingresar todos los campos")
+              ])
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c(
@@ -38803,24 +39047,26 @@ var render = function() {
         _c(
           "tbody",
           _vm._l(_vm.searchUser, function(usuario, index) {
-            return _c("datos-componente", {
-              key: usuario.id,
-              attrs: { usuario: usuario },
-              on: {
-                actualizar: function($event) {
-                  var i = arguments.length,
-                    argsArray = Array(i)
-                  while (i--) argsArray[i] = arguments[i]
-                  return _vm.updateUsuario.apply(
-                    void 0,
-                    [index].concat(argsArray)
-                  )
-                },
-                borrar: function($event) {
-                  return _vm.borrarUsuario(index)
-                }
-              }
-            })
+            return _vm.isAuthenticated
+              ? _c("datos-componente", {
+                  key: usuario.id,
+                  attrs: { usuario: usuario },
+                  on: {
+                    actualizar: function($event) {
+                      var i = arguments.length,
+                        argsArray = Array(i)
+                      while (i--) argsArray[i] = arguments[i]
+                      return _vm.updateUsuario.apply(
+                        void 0,
+                        [index].concat(argsArray)
+                      )
+                    },
+                    borrar: function($event) {
+                      return _vm.borrarUsuario(index)
+                    }
+                  }
+                })
+              : _vm._e()
           }),
           1
         )
@@ -38875,14 +39121,7 @@ var render = function() {
         return _c("curso-componente", {
           key: curso.id,
           attrs: { curso: curso },
-          on: {
-            actualizar: function($event) {
-              var i = arguments.length,
-                argsArray = Array(i)
-              while (i--) argsArray[i] = arguments[i]
-              return _vm.updateCurso.apply(void 0, [index].concat(argsArray))
-            }
-          }
+          on: { new: _vm.nuevoCurso }
         })
       }),
       1

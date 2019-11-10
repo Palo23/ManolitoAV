@@ -9,7 +9,13 @@
 
 
     <div class="container">
-        <a class="btn btn-info" href="{{ route('register')}}"><strong>Registrar Usuario</strong></a>
+
+            <div class="text-center">
+                    <a class="btn btn-outline-info" href="{{ route('register')}}"><strong>Registrar Usuario</strong></a>
+                    <a class="btn btn-outline-info" href="{{ route('usuario.tabla')}}"><strong>Gestionar Usuarios</strong></a>
+            </div>
+            <br>
+
         <tabla-componente></tabla-componente>
     </div>
     

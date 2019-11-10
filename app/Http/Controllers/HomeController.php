@@ -29,7 +29,7 @@ class HomeController extends Controller
     public function index()
     {
         if (Auth::user()->hasRole('Administrador')) {
-            return view('home');
+            return view('user.usuarios');
         } else if(Auth::user()->hasRole('Profesor')) {
             return view('inicio.agregarCurso');
         }else if(Auth::user()->hasRole('Alumno')) {

@@ -6,7 +6,7 @@
         v-for="(curso, index) in cursos"
         :key="curso.id"
         :curso="curso"
-        @actualizar="updateCurso(index, ...arguments)"
+        @new="nuevoCurso"
     ></curso-componente>
 </div>
 </div>
