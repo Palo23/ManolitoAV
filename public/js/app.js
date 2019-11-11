@@ -2362,6 +2362,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -2389,6 +2391,10 @@ __webpack_require__.r(__webpack_exports__);
 
       if (this.nombre == '' || this.descripcion == '' || this.password == '') {
         this.error = true;
+        $('.alert').fadeIn();
+        setTimeout(function () {
+          $(".alert").fadeOut();
+        }, 2000);
         this.nombre = '';
         this.descripcion = '';
         this.password = '';
@@ -38963,9 +38969,14 @@ var render = function() {
           }),
           _vm._v(" "),
           _vm.error
-            ? _c("label", { staticClass: "text-danger" }, [
-                _vm._v("*Debes ingresar todos los campos")
-              ])
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert alert-danger alert-dismissible fade show",
+                  attrs: { role: "alert" }
+                },
+                [_c("strong", [_vm._v("*Debes llenar todos los campos")])]
+              )
             : _vm._e()
         ]),
         _vm._v(" "),
