@@ -78,7 +78,16 @@ export default {
                 $('#crearModal').modal({});
             },
         agregarCurso(nuevoCurso){
-            $('#exampleModal').modal('hide');
+            $('#crearModal').modal('hide');
+            axios.get('/cursosCreacion')
+            .then((res) => {
+            this.cursos = res.data;
+        });
+            this.$swal({
+                            title: 'Agregado',
+                            text: 'El curso fue agregado exitosamente',
+                            type: 'success'
+                                });
         },
         updateCurso(index, curso){
             this.cursos[index] = curso;
@@ -87,6 +96,11 @@ export default {
         .then((res) => {
             this.cursos = res.data;
         });
+        this.$swal({
+                            title: 'Modificado',
+                            text: 'El curso fue modificado exitosamente',
+                            type: 'success'
+                                });
         },
         borrarCurso(index, curso){
             this.cursos.splice(index, 1);
@@ -95,6 +109,11 @@ export default {
             .then((res) => {
             this.cursos = res.data;
             });
+            this.$swal({
+                            title: 'Eliminado',
+                            text: 'El curso fue eliminado exitosamente',
+                            type: 'error'
+                                });
         },
     },
     computed:{

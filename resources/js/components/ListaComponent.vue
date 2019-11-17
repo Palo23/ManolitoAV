@@ -1,6 +1,9 @@
 <template>
                                 <div>
                                     <table style="table-layout: fixed; width: 400%;" class="table">
+                                        <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
+                                            <strong>No se cambió ningún campo</strong>
+                                        </div>
                                     <tr>
                                         <th>
                                         <input v-if="modoEdicion" id="" class="form-control" type="text" v-model="curso.nombre">
@@ -24,27 +27,6 @@
                                         </td>
                                     </tr>
                                 </table>
-
-<div class="modal fade" id="borrarCursoModal" tabindex="-1" role="dialog" aria-labelledby="borrarCursoModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Eliminar curso</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ¿Seguro que deseás eliminar? | {{this.toDeleteCursoId}}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" @click="delCurso">Confirmar</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-      </div>
-    </div>
-  </div>
-</div>
-
                                 </div>
 </template>
 <script>
@@ -57,7 +39,8 @@ export default {
                 modoEliminar: false,
                 toDeleteCursoId: '',
                 nombre: '',
-                descripcion: ''
+                descripcion: '',
+                error: false
             }
         },
         methods: {
@@ -79,16 +62,33 @@ export default {
                 })
             },
             modalDelCurso(){
-                this.toDeleteCursoId = this.curso.id;
-                console.log('toDeleteCursoId', this.toDeleteCursoId);
-                $('#borrarCursoModal').modal({});
+                var id
+                var authID
+                authID = this.user.id
+                id = this.curso.id
+                Vue.swal({
+                    title: "¿Estás seguro de eliminar el curso?",
+                    text: `${this.curso.nombre}`,
+                    type: "question",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Sí",
+                    showCancelButton: true,
+                    cancelButtonText: "Cancelar"
+                    }).then(function(isConfirm) {
+                            if (isConfirm.value) {
+                                    axios.delete(`/cursosCreacion/${id}`).then((res) => {
+                                        Vue.swal({
+                                            title: "Eliminado", 
+                                            text: "El curso ha sido eliminado", 
+                                            type: "success",
+                                            allowEscapeKey: false,
+                                            allowOutsideClick: false}).then(function(){ 
+                                            location.reload();
+                                            });
+                                    });
+                                }
+                            });
             },
-            delCurso() {
-                axios.delete(`/cursosCreacion/${this.curso.id}`).then((res) => {
-                    $('#borrarCursoModal').modal('hide');
-                    this.$emit('borrar');
-                });
-            }
         },
     }
 </script>

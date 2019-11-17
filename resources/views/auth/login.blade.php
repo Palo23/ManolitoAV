@@ -3,17 +3,14 @@
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-md-6">
             <div class="card">
                 <div class="card-header">{{ __('Inicio de Sesión') }}</div>
 
                 <div class="card-body">
-                        <div class="row">
-                            <div class="mb-2 col-md-2 mr-2 offset-1">
+                        <div style="margin-left: 20%;" class="text-center mb-3 col-md-2">
                                 <img src="{{asset('manolitoAV.png')}}" width="250" height="100" alt="">
                             </div>
-
-                            <div class="col-md-8" style="margin-left: 7%;">
                                     <form method="POST" action="{{ route('login') }}">
                                             @csrf
                                     
@@ -72,11 +69,6 @@
                                                 </div>
                                             </div>
                                         </form>
-                            </div>
-                                
-                                
-                        </div>
-                    
                 </div>
             </div>
         </div>

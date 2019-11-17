@@ -8,9 +8,6 @@
                             <input type="text" class="form-control" name="descripcion" v-model="descripcion" maxlength="100">
                             <label for="password">Contraseña</label>
                             <input type="password" class="form-control" name="password" v-model="password">
-                            <div v-if="error" class="alert alert-danger alert-dismissible fade show" role="alert">
-                                <strong>*Debes llenar todos los campos</strong>
-                            </div>
                             <!-- <label for="fotoCurso">Imagen del curso</label>
                             <div style="overflow-x: hidden;border: 1px solid #f1f1f1; margin: 5px 0px 3px 0px;">
                                 <input type="file" name="fotoCurso" v-on:change="changeFiles" ref="foto" accept=".jpg, .jpeg, .png" class="btn btn-xs">
@@ -27,8 +24,7 @@ export default {
             nombre: '',
             descripcion: '',
             password: '',
-            foto: '',
-            error: false
+            foto: ''
         }
     },
     methods: {
@@ -44,11 +40,11 @@ export default {
                 password: this.password
             };
             if (this.nombre == '' || this.descripcion == '' || this.password == '') {
-                this.error = true;
-                $('.alert').fadeIn();     
-                    setTimeout(function() {
-                    $(".alert").fadeOut();           
-                },2000);
+                this.$swal({
+                            title: 'Campos vacíos',
+                            text: 'Debes llenar todos los campos',
+                            type: 'error'
+                                });
                 this.nombre = '';
                 this.descripcion = '';
                 this.password = '';

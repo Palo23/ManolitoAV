@@ -20,30 +20,11 @@
                                             </div>
                                             <div v-else>
                                                 <button class="btn btn-primary" type="submit" @click="editar">Editar</button>
-                                                <button class="btn btn-secondary" type="submit" @click="modalDelUser(usuario.id)">Eliminar</button>
+                                                <button class="btn btn-secondary" type="submit" @click="modalDelUser">Eliminar</button>
                                             </div>
                                         </td>
                                     </tr>
                                 </table>
-<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Eliminar usuario</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        ¿Seguro que deseás eliminar? | {{this.toDeleteUserId}}
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" @click="delUser(this.toDeleteUserId)">Confirmar</button>
-        <button type="button" class="btn btn-danger" data-dismiss="modal">Cancelar</button>
-      </div>
-    </div>
-  </div>
-</div>
                                 </div>
 </template>
 
@@ -56,7 +37,9 @@
                 prop: {id: '', name: '', email: '', rol: ''},
                 modoEdicion: false,
                 modoEliminar: false,
-                toDeleteUserId: ''
+                toDeleteUserId: '',
+                toDeleteUser2: '',
+                borrar: false
             }
         },
         methods: {
@@ -78,30 +61,38 @@
                 })
             },
             modalDelUser(){
-                var toDeleteUserId = this.usuario.id;
-                var usuarioID = this.user.id;
-                console.log(this.toDeleteUserId)
-                console.log(usuarioID)
-                $('#exampleModal').modal({});
+                var id
+                var authID
+                authID = this.user.id
+                id = this.usuario.id
+                Vue.swal({
+                    title: "¿Estás seguro de eliminar al usuario?",
+                    text: `${this.usuario.name}`,
+                    type: "question",
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Sí",
+                    showCancelButton: true,
+                    cancelButtonText: "Cancelar"
+                    }).then(function(isConfirm) {
+                            if (isConfirm.value) {
+                                if (authID === id) {
+                                    Vue.swal("Error", "No se puede borrar la sesión actual", "error");
+                                } else {
+                                    axios.delete(`/usuarios/${id}`).then((res) => {
+                                        Vue.swal({
+                                            title: "Eliminado", 
+                                            text: "El usuario ha sido eliminado", 
+                                            type: "success",
+                                            allowEscapeKey: false,
+                                            allowOutsideClick: false}).then(function(){ 
+                                            location.reload();
+                                            });
+                                    });
+                                }
+                            }
+                           
+                    });
             },
-
-            delUser(id) {
-                var usuarioID = this.user.id;
-                idUser = id;
-                if (idUser === '') {
-                    alert("No existe")
-                }
-                console.log('toDeleteUserId', idUser);
-                if(usuarioID === this.usuario.id){
-                    alert("No puedes eliminar al usuario actual")
-                }else{
-                    axios.delete(`usuarios/${this.usuario.id}`).then((res) => {
-                    $('#exampleModal').modal('hide');
-                    this.$emit('borrar');
-                })
-                }
-                
-            }
         },
     }
 </script>
