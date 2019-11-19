@@ -27,6 +27,9 @@ Vue.component('lista-componente', require('./components/ListaComponent.vue').def
 Vue.component('modal-componente', require('./components/ModalComponent.vue').default);
 Vue.component('todos-componente', require('./components/TodosComponent.vue').default);
 Vue.component('curso-componente', require('./components/CursoComponent.vue').default);
+Vue.component('miscursos-componente', require('./components/MisCursosComponent.vue').default);
+Vue.component('mios-componente', require('./components/MiosComponent.vue').default);
+
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to

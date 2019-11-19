@@ -79,6 +79,7 @@ class UsuariosController extends Controller
         
         $usuario = User::findOrFail($id);
         $usuario->roles()->detach();
+        $usuario->cursos()->detach();
         $usuario->delete();
         
     }

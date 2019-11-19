@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateComentariosPublicacionesTable extends Migration
+class CreateCursosPublicacionesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,10 +13,10 @@ class CreateComentariosPublicacionesTable extends Migration
      */
     public function up()
     {
-        Schema::create('comentarios_publicaciones', function (Blueprint $table) {
+        Schema::create('cursos_publicaciones', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('comentarios_id');
-            $table->foreign('comentarios_id')->references('id')->on('comentarios');
+            $table->integer('cursos_id')->unsigned();
+            $table->foreign('cursos_id')->references('id')->on('cursos');
             $table->unsignedBigInteger('publicaciones_id');
             $table->foreign('publicaciones_id')->references('id')->on('publicaciones');
             $table->timestamps();
@@ -30,6 +30,6 @@ class CreateComentariosPublicacionesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('comentarios_publicaciones');
+        Schema::dropIfExists('cursos_publicaciones');
     }
 }

@@ -23,7 +23,13 @@ class InscripcionController extends Controller
 
     public function index()
     {
-        return Cursos::with('archivo', 'users', 'profesor')->get();
+        if (Auth::user()->hasRole('Administrador')) {
+            return back();
+        } else if(Auth::user()->hasRole('Profesor')) {
+            return back();
+        }else if(Auth::user()->hasRole('Alumno')) {
+            return Cursos::with('archivo', 'users', 'profesor')->get();
+        }
     }
 
     /**

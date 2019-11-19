@@ -17,7 +17,6 @@ class CreatePublicacionesTable extends Migration
             $table->bigIncrements('id');
             $table->string('tema');
             $table->longText('descripcion');
-            $table->date('fecha');
             $table->timestamps();
         });
     }

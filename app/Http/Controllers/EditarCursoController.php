@@ -85,8 +85,6 @@ class EditarCursoController extends Controller
         $foto->nombre = $nombreArchivo;
         $foto->save();
         $curso = Cursos::find($id);
-        $curso->nombre = $request->nombre;
-        $curso->description = $request->descripcion;
         $archivo->move($this->profilePicturesFolder,$nombreArchivo);// subimos al servidor
         $curso->ID_archivo = $foto->id; // guardamos el nombre en la bd
         $curso->save(); // guardamos los cambios.

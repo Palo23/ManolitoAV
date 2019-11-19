@@ -15,10 +15,10 @@ class CreateArchivosPublicacionesTable extends Migration
     {
         Schema::create('archivos_publicaciones', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->unsignedBigInteger('ID_archivo');
-            $table->foreign('ID_archivo')->references('id')->on('archivos');
-            $table->unsignedBigInteger('ID_publicacion');
-            $table->foreign('ID_publicacion')->references('id')->on('publicaciones');
+            $table->unsignedBigInteger('archivos_id');
+            $table->foreign('archivos_id')->references('id')->on('archivos');
+            $table->unsignedBigInteger('publicaciones_id');
+            $table->foreign('publicaciones_id')->references('id')->on('publicaciones');
             $table->timestamps();
         });
     }

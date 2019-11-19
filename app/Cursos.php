@@ -24,4 +24,11 @@ class Cursos extends Model
         return $this
         ->belongsTo('App\User', 'id_user');
     }
+
+    public function publicaciones()
+    {
+        return $this
+        ->belongsToMany('App\Publicaciones')
+        ->withTimestamps();
+    }
 }

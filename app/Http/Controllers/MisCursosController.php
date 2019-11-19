@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Cursos;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\User;
+use App\DB;
 
-class CursoProfesorController extends Controller
+class MisCursosController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -19,13 +21,15 @@ class CursoProfesorController extends Controller
         $this->middleware('auth');
     }
 
-    private $profilePicturesFolder = "files";
-
     public function index()
     {
-        $idUser = Auth::user()->id;
-
-        return Cursos::where('id_user', $idUser)->with('archivo')->get();
+        if (Auth::user()->hasRole('Administrador')) {
+            return back();
+        } else if(Auth::user()->hasRole('Profesor')) {
+            return back();
+        }else if(Auth::user()->hasRole('Alumno')) {
+            return Cursos::with('archivo', 'users', 'profesor')->get();
+        }
     }
 
     /**
@@ -36,16 +40,7 @@ class CursoProfesorController extends Controller
      */
     public function store(Request $request)
     {
-        $curso = new Cursos();
-
-        $curso->id_user = Auth::user()->id;
-        $curso->ID_Archivo = 2;
-        $curso->nombre = $request->nombre;
-        $curso->description = $request->descripcion;
-        $curso->password = $request->password;
-
-        $curso->save();
-        
+        //
     }
 
     /**
@@ -68,12 +63,7 @@ class CursoProfesorController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $curso = Cursos::find($id);
-        $curso->nombre = $request->nombre;
-        $curso->description = $request->descripcion;
-        $curso->save();
-
-        return $curso;
+        //
     }
 
     /**
@@ -84,9 +74,6 @@ class CursoProfesorController extends Controller
      */
     public function destroy($id)
     {
-        $curso = Cursos::findOrFail($id);
-        $curso->publicaciones()->detach();
-        $curso->users()->detach();
-        $curso->delete();
+        //
     }
 }

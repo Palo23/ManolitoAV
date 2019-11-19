@@ -47,6 +47,8 @@ export default {
         .then((res) => {
             this.usuarios = res.data; 
         });
+        console.log(this.usuarios);
+        
     },
 
     methods: {

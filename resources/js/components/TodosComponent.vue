@@ -1,9 +1,15 @@
 <template>
 
 <div class="container">
+
+    <div id="busqueda" class="col-sm-12 hidden-sm hidden-xs">
+            <h2>Buscar curso</h2>
+            <input type="text" class="form-control col-sm-12" placeholder="Buscar por curso o profesor" v-model="nombreTodosCurso">
+        </div>
+
     <div class="row">
     <curso-componente
-        v-for="(curso, index) in cursos"
+        v-for="(curso, index) in searchTodosCursos"
         :key="curso.id"
         :curso="curso"
         @new="nuevoCurso"
@@ -20,7 +26,8 @@ export default {
     data() {
         return {
             cursos: null,
-            modalShow: false
+            modalShow: false,
+            nombreTodosCurso: ''
         }
     },
 
@@ -29,6 +36,8 @@ export default {
         .then((res) => {
             this.cursos = res.data;
         });
+        console.log(this.cursos);
+        
     },
     methods: {
         nuevoCurso(curso){
@@ -42,14 +51,13 @@ export default {
         },
     },
     computed:{
-		searchUser: function(){
-			if(this.name === ''){
-			    return this.usuarios;
+		searchTodosCursos: function(){
+			if(this.nombreTodosCurso === ''){
+			    return this.cursos;
 			}else{
-				return this.usuarios.filter((usuario)=>{
-                return usuario.name.toLowerCase().includes(this.name.toLowerCase()) ||
-                usuario.email.toLowerCase().includes(this.name.toLowerCase()) ||
-                usuario.roles[0].nombre.toLowerCase().includes(this.name.toLowerCase());
+				return this.cursos.filter((curso)=>{
+                return curso.nombre.toLowerCase().includes(this.nombreTodosCurso.toLowerCase()) ||
+                curso.profesor.name.toLowerCase().includes(this.nombreTodosCurso.toLowerCase());
 				});
 			}
 		}

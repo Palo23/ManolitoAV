@@ -34,7 +34,7 @@ class HomeController extends Controller
             return view('inicio.agregarCurso');
         }else if(Auth::user()->hasRole('Alumno')) {
             $cursos = Cursos::all();
-            return view('inicio.inscripcion');
+            return view('cursos.misCursos');
         }
      //  return view('home');
     }
@@ -50,6 +50,13 @@ class HomeController extends Controller
         //$curso = Cursos::find($id);
         //$curso->users()->attach($idUsuario);
         return view('cursos.vistaGeneral', compact('$curso'));
+    }
+
+    public function todosCursos(){
+        if(Auth::user()->hasRole('Alumno')) {
+            $cursos = Cursos::all();
+            return view('inicio.inscripcion');
+        }
     }
 
     public function search(Request $request)
