@@ -54,11 +54,20 @@
                     name: this.usuario.name,
                     email: this.usuario.email
                 };
-                axios.put(`/usuarios/${this.usuario.id}`, params).then((res) => {
+                if (this.usuario.name === '' || this.usuario.email === '') {
+                    this.$swal({
+                            title: 'Campos vacíos',
+                            text: 'No se permiten campos vacíos al editar',
+                            type: 'error'
+                                });
+                } else {
+                    axios.put(`/usuarios/${this.usuario.id}`, params).then((res) => {
                     this.modoEdicion = false;
                     const usuario = res.data;
                     this.$emit('actualizar', usuario)
                 })
+                }
+                
             },
             modalDelUser(){
                 var id

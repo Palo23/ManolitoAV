@@ -14,15 +14,20 @@
                 @if ( session('mensaje') )
                     <div class="alert alert-danger">{{ session('mensaje') }}</div>
                 @endif
+
+                @if ( session('mensajePublicado') )
+                    <div class="alert alert-success">{{ session('mensaje') }}</div>
+                @endif
+
                     <label for=""><h3>Publicar</h3></label>
                     <form class="form-group" action="{{ route('subirArchivo') }}" method="POST" enctype="multipart/form-data">
                             {{ csrf_field() }}
                         <div>
                             <label for="">Título:</label>
                             <input type="hidden" id="idCurso" name="idCurso" value="{{$curso->id}}">
-                            <input class="form-control" type="text" name="titulo" id="titulo" placeholder="Título de la publicación">
+                            <input class="form-control" type="text" name="titulo" id="titulo" placeholder="Título de la publicación" maxlength="50">
                             <label for="">Publicación:</label>
-                            <textarea class="form-control" name="descripcion" id="descripcion" placeholder="Descripción"></textarea>
+                            <textarea class="form-control" cols="50" rows="10" name="descripcion" id="descripcion" placeholder="Descripción"></textarea>
                             <label for="">Archivo:</label>
                             <input class="form-control" type="file" name="file-cur" accept=".jpg, .jpeg, .png, .doc, .docx, .pdf, .odt, .pptx, video/*"> 
                         </div>
@@ -38,6 +43,7 @@
                             <ul class="list-unstyled list-group list-group-flush">
                                 @foreach ($publicaciones as $publicacion)
                                 <li class="media py-1">
+                                        <img width="45" height="25" src="../files/documentos.png" class="mr-3" alt="...">
                                         <div class="media-body">
                                           <a href="{{ route('vistaPub', [$publicacion->id]) }}"><h5 class="mt-0 mb-1">{{$publicacion->tema}}</h5></a>
                                           

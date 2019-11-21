@@ -55,11 +55,19 @@ export default {
                     nombre: this.curso.nombre,
                     descripcion: this.curso.description
                 };
-                axios.put(`/cursosCreacion/${this.curso.id}`, params).then((res) => {
+                if (this.curso.nombre === '' || this.curso.descripcion === '') {
+                    this.$swal({
+                            title: 'Campos vacíos',
+                            text: 'No se permiten campos vacíos al editar',
+                            type: 'error'
+                                });
+                } else {
+                    axios.put(`/cursosCreacion/${this.curso.id}`, params).then((res) => {
                     this.modoEdicion = false;
                     const curso = res.data;
                     this.$emit('actualizar', curso)
                 })
+                }
             },
             modalDelCurso(){
                 var id

@@ -78,9 +78,24 @@ class UsuariosController extends Controller
     {
         
         $usuario = User::findOrFail($id);
-        $usuario->roles()->detach();
-        $usuario->cursos()->detach();
-        $usuario->delete();
+
+        if ($usuario->hasRole('Alumno')) {
+            $usuario->cursos()->detach();
+            $usuario->roles()->detach();
+            $usuario->delete();
+        }elseif ($usuario->hasRole('Profesor')) {
+            $cursos = Cursos::where('id_user', $id)->get();
+            //$cursos->users()->detach();
+            foreach ($cursos as $curso) {
+                $curso->users()->detach();
+                $curso->delete();
+            }
+            $usuario->roles()->detach();
+            $usuario->delete();
+        }elseif ($usuario->hasRole('Administrador')) {
+            $usuario->roles()->detach();
+            $usuario->delete();
+        }
         
     }
 }

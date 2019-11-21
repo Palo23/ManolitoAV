@@ -60,7 +60,7 @@ class GeneralController extends Controller
      */
     public function show($id)
     {
-        $cursos = Cursos::find($id);
+        $cursos = Cursos::findOrFail($id);
         $idUser = Auth::user()->id;
         $profesorCurso = $cursos->id_user;
 
@@ -134,25 +134,57 @@ class GeneralController extends Controller
         if ($request->titulo === NULL) {
             return back()->with('mensaje', 'Debes agregar un tema');
         }else if ($request->hasFile('file-cur')) {
-            $archivo = $request->file('file-cur');
-        $nombreArchivo = $archivo->getClientOriginalName();
+            if ($request->descripcion === NULL) {
+                $archivo = $request->file('file-cur');
+                $nombreArchivo = $archivo->getClientOriginalName();
+                
+                $foto = new Archivos;
+                $foto->ruta = "/files" . '/' . $nombreArchivo;
+                $foto->nombre = $nombreArchivo;
+                $foto->save();
+                $cursoID = $request->idCurso;
+                $archivo->move($this->profilePicturesFolder,$nombreArchivo);// subimos al servidor
+                $publicacion = new Publicaciones;
+                $publicacion->tema = $request->titulo;
+                $publicacion->descripcion = '';
+                $publicacion->save();
         
-        $foto = new Archivos;
-        $foto->ruta = "/files" . '/' . $nombreArchivo;
-        $foto->nombre = $nombreArchivo;
-        $foto->save();
-        $cursoID = $request->idCurso;
-        $archivo->move($this->profilePicturesFolder,$nombreArchivo);// subimos al servidor
-        $publicacion = new Publicaciones;
-        $publicacion->tema = $request->titulo;
-        $publicacion->descripcion = $request->descripcion;
-        $publicacion->save();
-
-        $publicacion->miCurso()->attach($cursoID);
-        $publicacion->archivosPub()->attach($foto->id);
+                $publicacion->miCurso()->attach($cursoID);
+                $publicacion->archivosPub()->attach($foto->id);
+                
+                return redirect()->route('vistaCurso', ['id' => $cursoID])->with('mensajePublicado', 'Publicado');
+            }else{
+                $archivo = $request->file('file-cur');
+                $nombreArchivo = $archivo->getClientOriginalName();
+                
+                $foto = new Archivos;
+                $foto->ruta = "/files" . '/' . $nombreArchivo;
+                $foto->nombre = $nombreArchivo;
+                $foto->save();
+                $cursoID = $request->idCurso;
+                $archivo->move($this->profilePicturesFolder,$nombreArchivo);// subimos al servidor
+                $publicacion = new Publicaciones;
+                $publicacion->tema = $request->titulo;
+                $publicacion->descripcion = $request->descripcion;
+                $publicacion->save();
         
-        return redirect()->route('vistaCurso', ['id' => $cursoID]);
+                $publicacion->miCurso()->attach($cursoID);
+                $publicacion->archivosPub()->attach($foto->id);
+                
+                return redirect()->route('vistaCurso', ['id' => $cursoID])->with('mensajePublicado', 'Publicado');
+            }
+            
         }else{
+            if ($request->descripcion === NULL) {
+                $cursoID = $request->idCurso;
+            $publicacion = new Publicaciones;
+            $publicacion->tema = $request->titulo;
+            $publicacion->descripcion = '';
+            $publicacion->save();
+
+            $publicacion->miCurso()->attach($cursoID);
+            return redirect()->route('vistaCurso', ['id' => $cursoID])->with('mensajePublicado', 'Publicado');
+            }else{
             $cursoID = $request->idCurso;
             $publicacion = new Publicaciones;
             $publicacion->tema = $request->titulo;
@@ -160,13 +192,15 @@ class GeneralController extends Controller
             $publicacion->save();
 
             $publicacion->miCurso()->attach($cursoID);
-            return redirect()->route('vistaCurso', ['id' => $cursoID]);
+            return redirect()->route('vistaCurso', ['id' => $cursoID])->with('mensajePublicado', 'Publicado');
+            }
+            
         }
         
     }
 
     public function mostrarPublicacion($id){
-        
+        $falla = Publicaciones::findOrFail($id);
 
         $publicacion = Publicaciones::where('id', $id)->with('miCurso', 'archivosPub')->first();
         $idPublicacion = $id;
@@ -193,6 +227,7 @@ class GeneralController extends Controller
     }
 
     public function mostrarPublicacionAlumno($id){
+        $falla = Publicaciones::findOrFail($id);
         $publicacion = Publicaciones::where('id', $id)->with('miCurso', 'archivosPub')->first();
         $archivo = $publicacion->archivosPub;
         $curso = $publicacion->miCurso;

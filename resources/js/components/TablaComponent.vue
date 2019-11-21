@@ -2,7 +2,7 @@
 <div class="card-body table-responsive-sm">
     <div id="busqueda" class="col-sm-12 col-md-4 hidden-sm hidden-xs" style="border-radius: 15px; padding-bottom: 35px;">
                   <h2>Buscar por nombre, correo o rol</h2> 
-                  <input type="text" class="form-control" placeholder="Buscar" v-model="name">
+                  <input type="text" class="form-control" placeholder="Buscar" v-model="nameUser">
                 </div>
     <table style="table-layout: fixed; width: 100%;" class="table">
                             <thead>
@@ -37,12 +37,12 @@ export default {
         return {
             usuarios: null,
             modalShow: false,
-            name: ''
+            nameUser: ''
         }
     },
 
     mounted() {
-        this.name = '';
+        this.nameUser = '';
         axios.get('/usuarios')
         .then((res) => {
             this.usuarios = res.data; 
@@ -75,13 +75,13 @@ export default {
     },
     computed:{
 		searchUser: function(){
-			if(this.name === ''){
+			if(this.nameUser === ''){
 			    return this.usuarios;
 			}else{
 				return this.usuarios.filter((usuario)=>{
-                return usuario.name.toLowerCase().includes(this.name.toLowerCase()) ||
-                usuario.email.toLowerCase().includes(this.name.toLowerCase()) ||
-                usuario.roles[0].nombre.toLowerCase().includes(this.name.toLowerCase());
+                return usuario.name.toLowerCase().includes(this.nameUser.toLowerCase()) ||
+                usuario.email.toLowerCase().includes(this.nameUser.toLowerCase()) ||
+                usuario.roles[0].nombre.toLowerCase().includes(this.nameUser.toLowerCase());
 				});
 			}
 		},

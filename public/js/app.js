@@ -2170,12 +2170,21 @@ __webpack_require__.r(__webpack_exports__);
         name: this.usuario.name,
         email: this.usuario.email
       };
-      axios.put("/usuarios/".concat(this.usuario.id), params).then(function (res) {
-        _this.modoEdicion = false;
-        var usuario = res.data;
 
-        _this.$emit('actualizar', usuario);
-      });
+      if (this.usuario.name === '' || this.usuario.email === '') {
+        this.$swal({
+          title: 'Campos vacíos',
+          text: 'No se permiten campos vacíos al editar',
+          type: 'error'
+        });
+      } else {
+        axios.put("/usuarios/".concat(this.usuario.id), params).then(function (res) {
+          _this.modoEdicion = false;
+          var usuario = res.data;
+
+          _this.$emit('actualizar', usuario);
+        });
+      }
     },
     modalDelUser: function modalDelUser() {
       var id;
@@ -2287,12 +2296,21 @@ __webpack_require__.r(__webpack_exports__);
         nombre: this.curso.nombre,
         descripcion: this.curso.description
       };
-      axios.put("/cursosCreacion/".concat(this.curso.id), params).then(function (res) {
-        _this.modoEdicion = false;
-        var curso = res.data;
 
-        _this.$emit('actualizar', curso);
-      });
+      if (this.curso.nombre === '' || this.curso.descripcion === '') {
+        this.$swal({
+          title: 'Campos vacíos',
+          text: 'No se permiten campos vacíos al editar',
+          type: 'error'
+        });
+      } else {
+        axios.put("/cursosCreacion/".concat(this.curso.id), params).then(function (res) {
+          _this.modoEdicion = false;
+          var curso = res.data;
+
+          _this.$emit('actualizar', curso);
+        });
+      }
     },
     modalDelCurso: function modalDelCurso() {
       var id;
@@ -2590,13 +2608,13 @@ __webpack_require__.r(__webpack_exports__);
     return {
       usuarios: null,
       modalShow: false,
-      name: ''
+      nameUser: ''
     };
   },
   mounted: function mounted() {
     var _this = this;
 
-    this.name = '';
+    this.nameUser = '';
     axios.get('/usuarios').then(function (res) {
       _this.usuarios = res.data;
     });
@@ -2629,11 +2647,11 @@ __webpack_require__.r(__webpack_exports__);
     searchUser: function searchUser() {
       var _this3 = this;
 
-      if (this.name === '') {
+      if (this.nameUser === '') {
         return this.usuarios;
       } else {
         return this.usuarios.filter(function (usuario) {
-          return usuario.name.toLowerCase().includes(_this3.name.toLowerCase()) || usuario.email.toLowerCase().includes(_this3.name.toLowerCase()) || usuario.roles[0].nombre.toLowerCase().includes(_this3.name.toLowerCase());
+          return usuario.name.toLowerCase().includes(_this3.nameUser.toLowerCase()) || usuario.email.toLowerCase().includes(_this3.nameUser.toLowerCase()) || usuario.roles[0].nombre.toLowerCase().includes(_this3.nameUser.toLowerCase());
         });
       }
     }
@@ -42653,19 +42671,19 @@ var render = function() {
             {
               name: "model",
               rawName: "v-model",
-              value: _vm.name,
-              expression: "name"
+              value: _vm.nameUser,
+              expression: "nameUser"
             }
           ],
           staticClass: "form-control",
           attrs: { type: "text", placeholder: "Buscar" },
-          domProps: { value: _vm.name },
+          domProps: { value: _vm.nameUser },
           on: {
             input: function($event) {
               if ($event.target.composing) {
                 return
               }
-              _vm.name = $event.target.value
+              _vm.nameUser = $event.target.value
             }
           }
         })

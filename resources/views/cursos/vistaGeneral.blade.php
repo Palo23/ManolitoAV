@@ -15,6 +15,7 @@
                     <ul class="list-unstyled list-group list-group-flush">
                         @foreach ($publicaciones as $publicacion)
                         <li class="media py-1">
+                            <img width="45" height="25" src="../files/documentos.png" class="mr-3" alt="...">
                                 <div class="media-body">
                                   <a href="{{ route('vistaPubAlumno', [$publicacion->id]) }}"><h5 class="mt-0 mb-1">{{$publicacion->tema}}</h5></a>
                                   
