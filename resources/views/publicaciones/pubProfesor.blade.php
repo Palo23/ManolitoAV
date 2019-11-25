@@ -16,7 +16,7 @@
                     <ul class="list-unstyled list-group list-group-flush">
                         <li class="media py-1">
                                 <div class="media-body">
-                                <p class="mt-0 mb-1">{{$publicacion->descripcion}}</p>
+                                <p class="mt-0 mb-1">{!! $publicacion->descripcion !!}</p>
                                 <a target="_blank" href="{{asset($archivo[0]->ruta)}}">{{$archivo[0]->nombre}}</a>
                                 <br>
                                 <a class="btn btn-light" href="/descargar/{{$archivo[0]->nombre}}">Descargar</a>

@@ -24,9 +24,20 @@ export default {
             nombre: '',
             descripcion: '',
             password: '',
-            foto: ''
+            foto: '',
+            cursos: [],
+            comprobar: [],
+            existe: false
         }
     },
+
+    mounted() {
+        axios.get('/cursosCreacion')
+        .then((res) => {
+            this.comprobar = res.data;
+        });
+    },
+
     methods: {
         changeFiles(){
             //obtenemos los archivos
@@ -39,7 +50,27 @@ export default {
                 descripcion: this.descripcion,
                 password: this.password
             };
-            if (this.nombre == '' || this.descripcion == '' || this.password == '') {
+
+            var tamanio = this.comprobar.length
+            for (let i = 0; i < tamanio; i++) {
+                if (this.nombre.toLowerCase() == this.comprobar[i].nombre.toLowerCase()) {
+                    this.existe = true
+                    break
+                }
+            }
+
+            if (this.existe) {
+                this.$swal({
+                            title: 'Existe',
+                            text: 'El curso ya existe',
+                            type: 'error'
+                                });
+                this.nombre = '';
+                this.descripcion = '';
+                this.password = '';
+                this.existe = false
+            } else {
+                if (this.nombre == '' || this.descripcion == '' || this.password == '') {
                 this.$swal({
                             title: 'Campos vacíos',
                             text: 'Debes llenar todos los campos',
@@ -57,6 +88,7 @@ export default {
                 const nuevoCurso = res.data;
                 this.$emit('new', nuevoCurso);
             });
+            }
             }
         }   
     }

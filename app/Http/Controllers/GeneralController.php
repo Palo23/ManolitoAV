@@ -77,7 +77,7 @@ class GeneralController extends Controller
             }elseif (Auth::user()->hasRole("Profesor")) {
                 $usuarioID = Auth::user()->id;
                 $usuario = User::find($usuarioID);
-                $curso = Cursos::where('id', $id)->with('users', 'publicaciones')->first();
+                $curso = Cursos::where('id', $id)->with('users', 'publicaciones')->orderBy('updated_at', 'asc')->first();
                 $publicaciones = $cursos->publicaciones;
                 $inscritos = $curso->users;
                 $cursoID = $curso->id_user;
@@ -165,8 +165,8 @@ class GeneralController extends Controller
                 $archivo->move($this->profilePicturesFolder,$nombreArchivo);// subimos al servidor
                 $publicacion = new Publicaciones;
                 $publicacion->tema = $request->titulo;
-                $publicacion->descripcion = $request->descripcion;
-                $publicacion->save();
+                $publicacion->descripcion = nl2br($request->descripcion);
+                $publicacion->save(); 
         
                 $publicacion->miCurso()->attach($cursoID);
                 $publicacion->archivosPub()->attach($foto->id);
@@ -188,7 +188,7 @@ class GeneralController extends Controller
             $cursoID = $request->idCurso;
             $publicacion = new Publicaciones;
             $publicacion->tema = $request->titulo;
-            $publicacion->descripcion = $request->descripcion;
+            $publicacion->descripcion = nl2br($request->descripcion);
             $publicacion->save();
 
             $publicacion->miCurso()->attach($cursoID);

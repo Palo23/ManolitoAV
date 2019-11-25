@@ -16,7 +16,7 @@
                 @endif
 
                 @if ( session('mensajePublicado') )
-                    <div class="alert alert-success">{{ session('mensaje') }}</div>
+                    <div class="alert alert-success">{{ session('mensajePublicado') }}</div>
                 @endif
 
                     <label for=""><h3>Publicar</h3></label>
@@ -45,8 +45,8 @@
                                 <li class="media py-1">
                                         <img width="45" height="25" src="../files/documentos.png" class="mr-3" alt="...">
                                         <div class="media-body">
-                                          <a href="{{ route('vistaPub', [$publicacion->id]) }}"><h5 class="mt-0 mb-1">{{$publicacion->tema}}</h5></a>
-                                          
+                                        <a href="{{ route('vistaPub', [$publicacion->id]) }}"><h5 class="mt-0 mb-1">{{$publicacion->tema}}</h5></a> 
+                                        <p>{{$publicacion->updated_at}}</p>
                                         </div>
                                     </li>
                                 @endforeach

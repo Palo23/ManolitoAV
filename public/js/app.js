@@ -2177,6 +2177,12 @@ __webpack_require__.r(__webpack_exports__);
           text: 'No se permiten campos vacíos al editar',
           type: 'error'
         });
+      } else if (!this.validEmail(this.usuario.email)) {
+        this.$swal({
+          title: 'Email no válido',
+          text: 'El correo ingresado no es válido',
+          type: 'error'
+        });
       } else {
         axios.put("/usuarios/".concat(this.usuario.id), params).then(function (res) {
           _this.modoEdicion = false;
@@ -2185,6 +2191,10 @@ __webpack_require__.r(__webpack_exports__);
           _this.$emit('actualizar', usuario);
         });
       }
+    },
+    validEmail: function validEmail(email) {
+      var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+      return re.test(email);
     },
     modalDelUser: function modalDelUser() {
       var id;
@@ -2522,8 +2532,18 @@ __webpack_require__.r(__webpack_exports__);
       nombre: '',
       descripcion: '',
       password: '',
-      foto: ''
+      foto: '',
+      cursos: [],
+      comprobar: [],
+      existe: false
     };
+  },
+  mounted: function mounted() {
+    var _this = this;
+
+    axios.get('/cursosCreacion').then(function (res) {
+      _this.comprobar = res.data;
+    });
   },
   methods: {
     changeFiles: function changeFiles() {
@@ -2532,29 +2552,49 @@ __webpack_require__.r(__webpack_exports__);
       console.log(this.$refs.foto.files[0].name);
     },
     nuevoCurso: function nuevoCurso() {
-      var _this = this;
+      var _this2 = this;
 
       var params = {
         nombre: this.nombre,
         descripcion: this.descripcion,
         password: this.password
       };
+      var tamanio = this.comprobar.length;
 
-      if (this.nombre == '' || this.descripcion == '' || this.password == '') {
+      for (var i = 0; i < tamanio; i++) {
+        if (this.nombre.toLowerCase() == this.comprobar[i].nombre.toLowerCase()) {
+          this.existe = true;
+          break;
+        }
+      }
+
+      if (this.existe) {
         this.$swal({
-          title: 'Campos vacíos',
-          text: 'Debes llenar todos los campos',
+          title: 'Existe',
+          text: 'El curso ya existe',
           type: 'error'
         });
         this.nombre = '';
         this.descripcion = '';
         this.password = '';
+        this.existe = false;
       } else {
-        this.nombre = '', this.descripcion = '', this.password = '', axios.post('/cursosCreacion', params).then(function (res) {
-          var nuevoCurso = res.data;
+        if (this.nombre == '' || this.descripcion == '' || this.password == '') {
+          this.$swal({
+            title: 'Campos vacíos',
+            text: 'Debes llenar todos los campos',
+            type: 'error'
+          });
+          this.nombre = '';
+          this.descripcion = '';
+          this.password = '';
+        } else {
+          this.nombre = '', this.descripcion = '', this.password = '', axios.post('/cursosCreacion', params).then(function (res) {
+            var nuevoCurso = res.data;
 
-          _this.$emit('new', nuevoCurso);
-        });
+            _this2.$emit('new', nuevoCurso);
+          });
+        }
       }
     }
   }
@@ -42142,7 +42182,7 @@ var render = function() {
                     }
                   ],
                   staticClass: "form-control",
-                  attrs: { id: "", type: "text" },
+                  attrs: { id: "", type: "email", required: "" },
                   domProps: { value: _vm.usuario.email },
                   on: {
                     input: function($event) {

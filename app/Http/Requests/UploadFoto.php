@@ -24,15 +24,15 @@ class UploadFoto extends FormRequest
     public function rules()
     {
         return [
-            'photo' => 'required|image',
+            'profile-picture' => 'required|image',
         ];
     }
     
     public function messages() 
     {
         return [
-            'photo.required' => 'No has seleccionado ningun archivo.',
-            'photo.image' => 'Debes subir una imagen.',
+            'profile-picture' => 'No has seleccionado ningun archivo.',
+            'profile-picture' => 'Debes subir una imagen.',
         ];
     }
 }

@@ -16,7 +16,7 @@
                     <ul class="list-unstyled list-group list-group-flush">
                         <li class="media py-1">
                                 <div class="media-body">
-                                <p class="mt-0 mb-1">{{$publicacion->descripcion}}</p>
+                                <p class="mt-0 mb-1">{!! $publicacion->descripcion !!}</p>
                                 </div>
                             </li>
                           </ul>  
